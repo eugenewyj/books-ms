@@ -6,14 +6,17 @@ ENV VERSION 1.0
 RUN apt-get update
 
 # CUrl
-RUN apt-get -y install curl
+RUN apt-get -y install curl && apt-get -y install wget
 
 # Dependencies
 RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
 RUN echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
-RUN curl -sL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+#RUN curl -sL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 RUN echo "deb http://packages.linuxmint.com debian import" >> /etc/apt/sources.list
+RUN sed -i "s/httpredir.debian.org/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list
+RUN sed -i "s/deb.nodesource.com\/node/mirrors.tuna.tsinghua.edu.cn\/nodesource\/deb/g" /etc/apt/sources.list.d/nodesource.list
 
 # Mongo, NodeJS, Git, SBT, xvfb, FireFox, Chrome
 RUN apt-get update && \
